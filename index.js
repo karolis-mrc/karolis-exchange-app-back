@@ -5,4 +5,4 @@ app.use(async ctx => {
   ctx.body = 'Hello World';
 });
 
-app.listen(3111);
+app.listen(process.env.PORT || 5000);
