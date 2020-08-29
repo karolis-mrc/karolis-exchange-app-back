@@ -6,6 +6,7 @@ const calculator = require('./fetcher');
 
 
 const app = new Koa();
+app.use(cors());
 const router = new Router();
 
 router.get('/rates', async (ctx) => {
