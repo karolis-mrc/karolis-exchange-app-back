@@ -1,0 +1,15 @@
+{
+  "name": "karolio-keitykla",
+  "version": "1.0.0",
+  "description": "currency-exchange app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Karolis",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^2.13.0"
+  }
+}
