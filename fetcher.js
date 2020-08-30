@@ -6,8 +6,6 @@ const parser = new xml2js.Parser();
 const fetch = async() => {
     const xmlData = await axios.get('https://www.lb.lt/webservices/FxRates/FxRates.asmx/getCurrentFxRates?tp=lt');
     const jsonData = await parser.parseStringPromise(xmlData.data);
-    // console.log(JSON.stringify(jsonData, null, 2));
-    // console.log(JSON.stringify(jsonData.FxRates.FxRate[0], null, 2));
     
     
     const date = jsonData.FxRates.FxRate[0].Dt[0];
