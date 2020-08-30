@@ -21,9 +21,9 @@ router.post('/log', async (ctx) => {
     ctx.body = await calculator.getRates();
 })
 
-// router.get('/', (ctx) => {
-//     ctx.body = 'Hello World';
-// })
+router.get('/', (ctx) => {
+    ctx.body = 'Hello World';
+})
 
 
 app.use(router.routes());
