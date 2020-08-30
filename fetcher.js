@@ -1,6 +1,6 @@
 const axios = require('axios');
 const xml2js = require('xml2js');
-const db = require('./database')
+const db = require('./database');
 const parser = new xml2js.Parser();
 
 const fetch = async() => {

@@ -34,4 +34,13 @@ const find = async (date) => {
     }
 }
 
+// const schema = new mongoose.Schema({
+//     // Use the `accessToken` string itself as `_id` so you get an
+//     // index for fast queries.
+//     _id: String,
+//     userId: String
+//   });
+  
+//   const AccessToken = mongoose.model('AccessToken', schema);
+
 module.exports = {store, find};
