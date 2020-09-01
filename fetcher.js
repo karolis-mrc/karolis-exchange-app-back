@@ -7,7 +7,6 @@ const fetch = async() => {
     const xmlData = await axios.get('https://www.lb.lt/webservices/FxRates/FxRates.asmx/getCurrentFxRates?tp=lt');
     const jsonData = await parser.parseStringPromise(xmlData.data);
     
-    
     const date = jsonData.FxRates.FxRate[0].Dt[0];
     const cc = jsonData.FxRates.FxRate.reduce((acc, val) => {
         const ccamt = val.CcyAmt[1];
@@ -15,9 +14,7 @@ const fetch = async() => {
             acc.rates[ccamt.Ccy] = ccamt.Amt[0];
         }
         return acc;
-        
     }, {date, rates: {}});
-
     return cc;
 
 }
@@ -34,5 +31,9 @@ const getRates = async() => {
     return data;
 }
 
+const storeUser = async(userId) => {
+    await db.storeUsers(userId);
+}
 
-module.exports = {getRates};
+
+module.exports = {getRates, storeUser};

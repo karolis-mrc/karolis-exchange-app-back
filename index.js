@@ -1,55 +1,53 @@
 const Koa = require('koa');
 const Router = require('koa-router');
+const jwt = require('jsonwebtoken');
 const cors = require('@koa/cors');
-const calculator = require('./fetcher');
-const FacebookStrategy = require('passport-facebook');
-const passport = require('passport');
-
-const FACEBOOK_APP_ID = "361813864814408";
-const FACEBOOK_APP_SECRET = "158550e4f295e02aaacafcf2426d605c";
+const fetcher = require('./fetcher');
+const {OAuth2Client} = require('google-auth-library');
+const bodyParser = require('koa-bodyparser');
+const { use } = require('passport');
 
 const app = new Koa();
 app.use(cors());
+app.use(bodyParser());
 const router = new Router();
 
-router.get('/rates', async (ctx) => {
-    ctx.body = await calculator.getRates();
-})
+const CLIENT_ID = '111244544025-fuilllp04thvdu6np56uurcpgjvq6jld.apps.googleusercontent.com';
 
-// router.get('/endpoint', async (ctx) => {
-//     // console.log(ctx.request.query);
-//     ctx.body = process.env.dataURL;
-// })
+const client = new OAuth2Client(CLIENT_ID);
+async function verify(token) {
+  const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: CLIENT_ID
+  });
+}
+
+app.use( async function(ctx, next) {
+    const {authorization} = ctx.request.headers;
+    const token = authorization.split(' ')[1];
+    const decoded = jwt.decode(token);
+    await verify(token);
+    return next();
+});
+
+router.get('/rates', async (ctx) => {
+    ctx.body = await fetcher.getRates();
+});
 
 router.post('/log', async (ctx) => {
-    ctx.body = await calculator.getRates();
-})
+    const {authorization} = ctx.request.headers;
+    const toke = authorization.split(' ')[1];
+    const decode = jwt.decode(toke);
+    let userId = decode.sub;
+    userId = await fetcher.storeUser(userId);
+});
 
 router.get('/', (ctx) => {
-    ctx.body = 'Hello World';
-})
+    ctx.body = 'Hello from server';
+});
 
-passport.use(new FacebookStrategy({
-    clientID: FACEBOOK_APP_ID,
-    clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/auth/facebook/callback"
-  },
-  function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ facebookId: profile.id }, function (err, user) {
-      return cb(err, user);
-    });
-  }
-));
-
-router.get('/auth/facebook',
-  passport.authenticate('facebook'));
-
-router.get('/auth/facebook/callback',
-  passport.authenticate('facebook', { failureRedirect: '/home' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/');
-  });
+const port = process.env.PORT;
+console.log(`Your port is ${port}`);
 
 app.use(router.routes());
 app.listen(process.env.PORT || 5000);

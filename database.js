@@ -1,6 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const dbName = "keitykla";
 const URL = "mongodb+srv://exchangeApp:DataBase123@cluster0.agzgr.mongodb.net/keitykla?retryWrites=true&w=majority";
+
 const store = async (data) => {
     const client = new MongoClient(URL, {useNewUrlParser: true, useUnifiedTopology: true});
 
@@ -25,7 +26,6 @@ const find = async (date) => {
 
         const db = client.db(dbName);
         const r = await db.collection('rates').findOne({date});
-        // console.log(r);
         return r;
     } catch (err) {
         console.log(err.stack);
@@ -34,13 +34,18 @@ const find = async (date) => {
     }
 }
 
-// const schema = new mongoose.Schema({
-//     // Use the `accessToken` string itself as `_id` so you get an
-//     // index for fast queries.
-//     _id: String,
-//     userId: String
-//   });
-  
-//   const AccessToken = mongoose.model('AccessToken', schema);
+const storeUsers = async (data) => {
+    const client = new MongoClient(URL, {useNewUrlParser: true, useUnifiedTopology: true});
 
-module.exports = {store, find};
+    try {
+        await client.connect();
+        const db = client.db(dbName);
+        db.collection('users_data').insertOne({'created_on' : new Date(), userId: data});
+    } catch (err) {
+        console.log(err.stack);
+    } finally {
+        client.close();
+    }
+}
+
+module.exports = {store, find, storeUsers};
