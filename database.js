@@ -1,6 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const dbName = "keitykla";
-const URL = "mongodb+srv://exchangeApp:DataBase123@cluster0.agzgr.mongodb.net/keitykla?retryWrites=true&w=majority";
+// const URL = "mongodb+srv://exchangeApp:DataBase123@cluster0.agzgr.mongodb.net/keitykla?retryWrites=true&w=majority";
+const URL = DATABASE_URL;
 
 const store = async (data) => {
     const client = new MongoClient(URL, {useNewUrlParser: true, useUnifiedTopology: true});
