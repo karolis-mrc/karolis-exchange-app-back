@@ -1,6 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const dbName = "keitykla";
-const URL = process.envDATABASE_URL;
+// const URL = process.env.DATABASE_URL;
+const URL = "mongodb+srv://exchangeApp:<password>@cluster0.agzgr.mongodb.net/<dbname>?retryWrites=true&w=majority";
 
 const store = async (data) => {
     const client = new MongoClient(URL, {useNewUrlParser: true, useUnifiedTopology: true});

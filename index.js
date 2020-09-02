@@ -24,10 +24,13 @@ async function verify(token) {
 
 app.use( async function(ctx, next) {
     const {authorization} = ctx.request.headers;
-    const token = authorization.split(' ')[1];
-    const decoded = jwt.decode(token);
-    await verify(token);
-    return next();
+    if (authorization) {
+        const token = authorization && authorization.split(' ')[1];
+        const decoded = jwt.decode(token);
+        await verify(token);
+        return next();
+    } 
+    ctx.throw(401, "Access not allowed");
 });
 
 router.get('/rates', async (ctx) => {
@@ -46,8 +49,8 @@ router.get('/', (ctx) => {
     ctx.body = 'Hello from server';
 });
 
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 console.log(`Your port is ${port}`);
 
 app.use(router.routes());
-app.listen(process.env.PORT || 5000);
+app.listen(port);
